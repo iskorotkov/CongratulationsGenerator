@@ -6,8 +6,8 @@ namespace CongratulationsGenerator.MicrosoftOffice
 {
     public class WordDoc : ITemplateDocument
     {
-        private Application _app;
-        private Document _doc;
+        private readonly Application _app;
+        private readonly Document _doc;
         
         public WordDoc(string filename)
         {
