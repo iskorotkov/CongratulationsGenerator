@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CongratulationsGenerator.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CongratulationsGenerator.MicrosoftOffice", "CongratulationsGenerator.MicrosoftOffice\CongratulationsGenerator.MicrosoftOffice.csproj", "{C2353996-24D4-4706-9708-A8EE466B6BF6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CongratulationsGenerator.Startup", "CongratulationsGenerator.Startup\CongratulationsGenerator.Startup.csproj", "{30A8AF89-AEEE-4426-903D-DAF60E1741F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CongratulationsGenerator.WishesDistributors", "CongratulationsGenerator.WishesDistributors\CongratulationsGenerator.WishesDistributors.csproj", "{96F5115D-5197-4EE8-990C-8CA33C6940FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{C2353996-24D4-4706-9708-A8EE466B6BF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2353996-24D4-4706-9708-A8EE466B6BF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2353996-24D4-4706-9708-A8EE466B6BF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30A8AF89-AEEE-4426-903D-DAF60E1741F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30A8AF89-AEEE-4426-903D-DAF60E1741F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30A8AF89-AEEE-4426-903D-DAF60E1741F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30A8AF89-AEEE-4426-903D-DAF60E1741F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96F5115D-5197-4EE8-990C-8CA33C6940FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96F5115D-5197-4EE8-990C-8CA33C6940FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96F5115D-5197-4EE8-990C-8CA33C6940FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96F5115D-5197-4EE8-990C-8CA33C6940FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
