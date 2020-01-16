@@ -4,8 +4,9 @@ namespace CongratulationsGenerator.MicrosoftOffice
 {
     public class MicrosoftOfficeFactory : IDocumentsFactory, IConfigurationFactory
     {
-        private static readonly string TableFilename = null;
-        private static ExcelDoc _table = null;
+        // TODO: Remove the absolute path to data table and use something flexible instead.
+        private const string TableFilename = @"C:\Projects\CongratulationsGenerator\Resources\Data.xlsx";
+        private static ExcelDoc _table;
 
         public IConfiguration GetConfiguration()
         {
