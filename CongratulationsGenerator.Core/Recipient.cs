@@ -9,6 +9,6 @@
         }
         
         public string Name { get; }
-        public Gender Gender { get; }
+        public IGender Gender { get; }
     }
 }

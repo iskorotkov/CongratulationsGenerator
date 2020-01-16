@@ -18,7 +18,6 @@
             var wishes = table.GetWishes();
             distributor.SetWishes(wishes);
 
-            template.CreateNewDoc();
             foreach (var recipient in recipients)
             {
                 var recipientWishes = distributor.GetNextWishes();
@@ -27,7 +26,6 @@
             template.ApplyFont(config.GetFont());
             template.SaveDoc();
             template.CloseDoc();
-            template.CloseTemplate();
         }
     }
 }

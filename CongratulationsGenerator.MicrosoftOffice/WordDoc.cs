@@ -15,14 +15,18 @@ namespace CongratulationsGenerator.MicrosoftOffice
             _doc = _app.Documents.Add(filename);
         }
 
-        public void CreateNewDoc()
+        public void AddRecipient(Recipient recipient, IEnumerable<string> wishes)
         {
-            throw new System.NotImplementedException();
-        }
+            _doc.Bookmarks["Dear"].Range.Text = recipient.Gender.DearForm();
+            _doc.Bookmarks["Name"].Range.Text = recipient.Name;
 
-        public void AddRecipient(Recipient name, IEnumerable<string> wishes)
-        {
-            throw new System.NotImplementedException();
+            var index = 0;
+            foreach (var wish in wishes)
+            {
+                _doc.Bookmarks["Wish" + index].Range.Text = wish;
+                
+                index++;
+            }
         }
 
         public void ApplyFont(string font)
@@ -32,17 +36,12 @@ namespace CongratulationsGenerator.MicrosoftOffice
 
         public void SaveDoc()
         {
-            throw new System.NotImplementedException();
+            _doc.Save();
         }
 
         public void CloseDoc()
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void CloseTemplate()
-        {
-            throw new System.NotImplementedException();
+            _app.Quit(false);
         }
     }
 }
