@@ -6,5 +6,6 @@ namespace CongratulationsGenerator.Core
     {
         IEnumerable<Recipient> GetRecipients();
         IEnumerable<WishCategory> GetWishes();
+        void Close();
     }
 }
