@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Gender.cs" />
+    <Compile Include="IConfigurationFactory.cs" />
     <Compile Include="IDistributorFactory.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="IConfiguration.cs" />

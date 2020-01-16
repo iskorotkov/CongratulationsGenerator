@@ -48,10 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExcelEditor.cs" />
-    <Compile Include="MicrosoftOfficeDocumentsFactory.cs" />
+    <Compile Include="ExcelDoc.cs" />
+    <Compile Include="MicrosoftOfficeFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WordEditor.cs" />
+    <Compile Include="WordDoc.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

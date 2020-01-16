@@ -2,7 +2,7 @@
 {
     public interface IDocumentsFactory
     {
-        IDataTable CreateDataTable();
-        ITemplateDocument CreateTemplateDocument();
+        IDataTable OpenDataTable();
+        ITemplateDocument OpenTemplateDocument(string filename);
     }
 }
