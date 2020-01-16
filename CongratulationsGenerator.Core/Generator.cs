@@ -1,18 +1,26 @@
 ﻿namespace CongratulationsGenerator.Core
 {
-    public static class Generator
+    public class Generator
     {
-        public static IDocumentsFactory DocumentsFactory { private get; set; }
-        public static IDistributorFactory DistributorFactory { private get; set; }
-        public static IConfigurationFactory ConfigurationFactory { private get; set; }
+        private readonly IConfigurationFactory _configurationFactory;
+        private readonly IDistributorFactory _distributorFactory;
+        private readonly IDocumentsFactory _documentsFactory;
 
-        public static void Generate()
+        public Generator(IDocumentsFactory documentsFactory, IDistributorFactory distributorFactory,
+            IConfigurationFactory configurationFactory)
         {
-            var config = ConfigurationFactory.GetConfiguration();
+            _documentsFactory = documentsFactory;
+            _distributorFactory = distributorFactory;
+            _configurationFactory = configurationFactory;
+        }
 
-            var table = DocumentsFactory.OpenDataTable();
-            var template = DocumentsFactory.OpenTemplateDocument(config.GetTemplatePath());
-            var distributor = DistributorFactory.CreateDistributor();
+        public void Generate()
+        {
+            var config = _configurationFactory.GetConfiguration();
+
+            var table = _documentsFactory.OpenDataTable();
+            var template = _documentsFactory.OpenTemplateDocument(config.GetTemplatePath());
+            var distributor = _distributorFactory.CreateDistributor();
 
             var recipients = table.GetRecipients();
             var wishes = table.GetWishes();
@@ -23,6 +31,7 @@
                 var recipientWishes = distributor.GetNextWishes();
                 template.AddRecipient(recipient, recipientWishes);
             }
+
             template.ApplyFont(config.GetFont());
             template.SaveDoc();
             template.CloseDoc();
