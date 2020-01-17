@@ -63,11 +63,13 @@ namespace CongratulationsGenerator.MicrosoftOffice
         
         public IEnumerable<Recipient> GetRecipients()
         {
+            // TODO: Retrieve recipients sheet using its name.
             return ReadRecipients(_book.Worksheets[0]);
         }
 
         public IEnumerable<WishCategory> GetWishes()
         {
+            // TODO: Retrieve wishes sheet using its name.
             return ReadWishes(_book.Worksheets[1]);
         }
 
