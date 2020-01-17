@@ -5,7 +5,7 @@ using CongratulationsGenerator.WishesDistributors;
 
 namespace CongratulationsGenerator.Permutations
 {
-    public class ElementsSwapper : IElementsSwapper
+    public class ElementsSwapper : IPermutationGenerator
     {
         public IEnumerable<T> MakePermutation<T>(IEnumerable<T> original)
         {

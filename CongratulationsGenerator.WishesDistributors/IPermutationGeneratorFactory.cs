@@ -2,6 +2,6 @@
 {
     public interface IPermutationGeneratorFactory
     {
-        IElementsSwapper MakePermutationGenerator();
+        IPermutationGenerator MakePermutationGenerator();
     }
 }

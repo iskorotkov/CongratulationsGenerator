@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DistributorFactory.cs" />
-    <Compile Include="IElementsSwapper.cs" />
+    <Compile Include="IPermutationGenerator.cs" />
     <Compile Include="IPermutationGeneratorFactory.cs" />
     <Compile Include="Distributor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
