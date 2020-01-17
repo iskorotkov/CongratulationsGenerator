@@ -17,7 +17,7 @@ namespace CongratulationsGenerator.MicrosoftOffice
 
         public void AddRecipient(Recipient recipient, IEnumerable<string> wishes)
         {
-            _doc.Bookmarks["Dear"].Range.Text = recipient.Gender.DearForm();
+            _doc.Bookmarks["Dear"].Range.Text = recipient.Gender.DearForm;
             _doc.Bookmarks["Name"].Range.Text = recipient.Name;
 
             var index = 0;

@@ -10,6 +10,10 @@ namespace CongratulationsGenerator.Startup
             var officeFactory = new MicrosoftOffice.MicrosoftOfficeFactory();
             var distributorFactory = new DistributorFactory();
             
+            Gender.Add(new Gender(@"^[мМmM].*", "Дорогой"));
+            Gender.Add(new Gender(@"^[жЖwW].*", "Дорогая"));
+            Gender.Add(new Gender(@"", "Дорогой(ая)"));
+
             var generator = new Generator(officeFactory, distributorFactory, officeFactory);
             generator.Generate();
         }

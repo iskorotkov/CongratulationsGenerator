@@ -1,46 +1,36 @@
-﻿namespace CongratulationsGenerator.Core
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace CongratulationsGenerator.Core
 {
-    public interface IGender
+    public class Gender
     {
-        string DearForm();
-    }
+        private static readonly List<Gender> Genders = new List<Gender>();
 
-    namespace Genders
-    {
-        public class Male : IGender
+        private readonly string _pattern;
+
+        public Gender(string pattern, string dearForm)
         {
-            public string DearForm() => "Дорогой";
+            _pattern = pattern;
+            DearForm = dearForm;
         }
 
-        public class Female : IGender
+        public string DearForm { get; }
+
+        public static void Add(Gender gender)
         {
-            public string DearForm() => "Дорогая";
+            Genders.Add(gender);
         }
 
-        public class Other : IGender
+        public static Gender Create(string gender)
         {
-            public string DearForm() => "Дорогой(ая)";
+            return Genders.FirstOrDefault(possibleGender => possibleGender.Matched(gender));
         }
-    }
-    
-    public static class GenderUtils
-    {
-        public static IGender DetermineGender(string gender)
-        {
-            if (string.IsNullOrEmpty(gender))
-            {
-                return new Genders.Other();
-            }
 
-            gender = gender.ToLower();
-            return gender[0] switch
-            {
-                'm' => new Genders.Male(),
-                'м' => new Genders.Male(),
-                'f' => new Genders.Female(),
-                'ж' => new Genders.Female(),
-                _ => new Genders.Other()
-            };
+        private bool Matched(string gender)
+        {
+            return Regex.IsMatch(gender, _pattern);
         }
     }
 }
