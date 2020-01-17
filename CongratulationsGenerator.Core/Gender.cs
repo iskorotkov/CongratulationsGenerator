@@ -18,7 +18,7 @@ namespace CongratulationsGenerator.Core
 
         public string DearForm { get; }
 
-        public static void Add(Gender gender)
+        public static void Register(Gender gender)
         {
             Genders.Add(gender);
         }
