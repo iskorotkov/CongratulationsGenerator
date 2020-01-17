@@ -2,7 +2,7 @@
 
 namespace CongratulationsGenerator.WishesDistributors
 {
-    public interface IPermutationGenerator
+    public interface IElementsSwapper
     {
         IEnumerable<T> MakePermutation<T>(IEnumerable<T> original);
     }

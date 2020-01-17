@@ -40,8 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PermutationGenerator.cs" />
-    <Compile Include="PermutationGeneratorFactory.cs" />
+    <Compile Include="ElementsSwapper.cs" />
+    <Compile Include="ElementsSwapperFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

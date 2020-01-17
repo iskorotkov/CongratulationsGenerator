@@ -15,7 +15,7 @@ namespace CongratulationsGenerator.Startup
             Gender.Register(new Gender(@"^[жЖwW].*", "Дорогая"));
             Gender.Register(new Gender(@"", "Дорогой(ая)"));
             
-            Distributor.PermutationGeneratorFactory = new PermutationGeneratorFactory();
+            Distributor.PermutationGeneratorFactory = new ElementsSwapperFactory();
 
             var generator = new Generator(officeFactory, distributorFactory, officeFactory);
             generator.Generate();
