@@ -1,4 +1,5 @@
 ﻿using CongratulationsGenerator.Core;
+using CongratulationsGenerator.Permutations;
 using CongratulationsGenerator.WishesDistributors;
 
 namespace CongratulationsGenerator.Startup
@@ -10,9 +11,11 @@ namespace CongratulationsGenerator.Startup
             var officeFactory = new MicrosoftOffice.MicrosoftOfficeFactory();
             var distributorFactory = new DistributorFactory();
             
-            Gender.Add(new Gender(@"^[мМmM].*", "Дорогой"));
-            Gender.Add(new Gender(@"^[жЖwW].*", "Дорогая"));
-            Gender.Add(new Gender(@"", "Дорогой(ая)"));
+            Gender.Register(new Gender(@"^[мМmM].*", "Дорогой"));
+            Gender.Register(new Gender(@"^[жЖwW].*", "Дорогая"));
+            Gender.Register(new Gender(@"", "Дорогой(ая)"));
+            
+            Distributor.PermutationGeneratorFactory = new PermutationGeneratorFactory();
 
             var generator = new Generator(officeFactory, distributorFactory, officeFactory);
             generator.Generate();

@@ -52,6 +52,10 @@
       <Project>{c2353996-24d4-4706-9708-a8ee466b6bf6}</Project>
       <Name>CongratulationsGenerator.MicrosoftOffice</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CongratulationsGenerator.Permutations\CongratulationsGenerator.Permutations.csproj">
+      <Project>{efb01225-f406-47c2-b2ff-2d639118e16d}</Project>
+      <Name>CongratulationsGenerator.Permutations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CongratulationsGenerator.WishesDistributors\CongratulationsGenerator.WishesDistributors.csproj">
       <Project>{96f5115d-5197-4ee8-990c-8ca33c6940fc}</Project>
       <Name>CongratulationsGenerator.WishesDistributors</Name>

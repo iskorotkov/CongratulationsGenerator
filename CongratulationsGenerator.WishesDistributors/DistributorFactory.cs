@@ -7,7 +7,7 @@ namespace CongratulationsGenerator.WishesDistributors
     {
         public IWishesDistributor CreateDistributor(IEnumerable<WishCategory> wishCategories)
         {
-            return new SimpleDistributor(wishCategories);
+            return new Distributor(wishCategories);
         }
     }
 }
