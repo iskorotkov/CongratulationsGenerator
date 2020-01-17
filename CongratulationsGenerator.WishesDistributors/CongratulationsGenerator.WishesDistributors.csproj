@@ -44,7 +44,10 @@
     <Compile Include="IPermutationGenerator.cs" />
     <Compile Include="IPermutationGeneratorFactory.cs" />
     <Compile Include="Distributor.cs" />
+    <Compile Include="NotEnoughWishesException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Triple.cs" />
+    <Compile Include="TripleGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CongratulationsGenerator.Core\CongratulationsGenerator.Core.csproj">

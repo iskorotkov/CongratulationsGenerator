@@ -4,53 +4,65 @@ using CongratulationsGenerator.Core;
 
 namespace CongratulationsGenerator.WishesDistributors
 {
-    public class Distributor : IWishesDistributor
+    public partial class Distributor : IWishesDistributor
     {
         public static IPermutationGeneratorFactory PermutationGeneratorFactory;
-        
+
         public Distributor(IEnumerable<WishCategory> wishCategories)
         {
             _wishCategories = wishCategories;
         }
 
         private readonly IEnumerable<WishCategory> _wishCategories;
-        
+        private List<Triple> _optimalVariants;
+        private List<Triple> _otherVariants;
+        private bool _generated;
+
         public bool IsEnoughWishes(int recipients)
         {
             var variants = _wishCategories.Aggregate(1, (current, wishCategory) => current * wishCategory.Wishes.Count);
             return variants >= recipients;
         }
 
-        private struct Triple
-        {
-            public Triple(string x, string y, string z)
-            {
-                X = x;
-                Y = y;
-                Z = z;
-            }
-
-            public string X { get; }
-            public string Y { get; }
-            public string Z { get; }
-        }
 
         public IEnumerable<string> GetNextWishes()
         {
-            var optimalVariants = new HashSet<Triple>();
-            var otherVariants = new HashSet<Triple>();
-
-            foreach (var category in _wishCategories)
+            if (!_generated)
             {
-                
+                GenerateTriples();
+                _generated = true;
             }
 
-            for (var categoryIndex = 0; categoryIndex < _wishCategories.Count(); categoryIndex++)
+            var collectionToUse = _optimalVariants.Count > 0
+                ? _optimalVariants
+                : _otherVariants.Count > 0
+                    ? _otherVariants
+                    : null;
+
+            if (collectionToUse == null)
             {
-                
+                throw new NotEnoughWishesException();
             }
 
-            return null;
+            var result = collectionToUse.First();
+            _optimalVariants.Remove(result);
+            return result.Wishes();
+        }
+
+        private void GenerateTriples()
+        {
+            var permutationsGenerator = PermutationGeneratorFactory.MakePermutationGenerator();
+
+            var wishes = _wishCategories
+                .Select(category => permutationsGenerator.MakePermutation(category.Wishes).ToList())
+                .ToList();
+            wishes = permutationsGenerator.MakePermutation(wishes).ToList();
+
+            var tripleGenerator = new TripleGenerator();
+            tripleGenerator.GenerateTriples(wishes);
+
+            _optimalVariants = tripleGenerator.OptimalVariants;
+            _otherVariants = tripleGenerator.OtherVariants;
         }
     }
 }
