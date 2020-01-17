@@ -5,17 +5,19 @@ namespace CongratulationsGenerator.WishesDistributors
 {
     public class SimpleDistributor : IWishesDistributor
     {
-        public bool IsEnoughWishes()
+        public SimpleDistributor(IEnumerable<WishCategory> wishCategories)
+        {
+            _wishCategories = wishCategories;
+        }
+
+        private readonly IEnumerable<WishCategory> _wishCategories;
+        
+        public bool IsEnoughWishes(int recipients)
         {
             throw new System.NotImplementedException();
         }
 
         public IEnumerable<string> GetNextWishes()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void SetWishes(IEnumerable<WishCategory> wishes)
         {
             throw new System.NotImplementedException();
         }

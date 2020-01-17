@@ -1,7 +1,9 @@
-﻿namespace CongratulationsGenerator.Core
+﻿using System.Collections.Generic;
+
+namespace CongratulationsGenerator.Core
 {
     public interface IDistributorFactory
     {
-        IWishesDistributor CreateDistributor();
+        IWishesDistributor CreateDistributor(IEnumerable<WishCategory> wishCategories);
     }
 }

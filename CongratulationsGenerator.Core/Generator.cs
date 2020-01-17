@@ -20,11 +20,11 @@
 
             var table = _documentsFactory.OpenDataTable();
             var template = _documentsFactory.OpenTemplateDocument(config.GetTemplatePath());
-            var distributor = _distributorFactory.CreateDistributor();
 
             var recipients = table.GetRecipients();
             var wishes = table.GetWishes();
-            distributor.SetWishes(wishes);
+
+            var distributor = _distributorFactory.CreateDistributor(wishes);
 
             foreach (var recipient in recipients)
             {

@@ -4,8 +4,7 @@ namespace CongratulationsGenerator.Core
 {
     public interface IWishesDistributor
     {
-        bool IsEnoughWishes();
+        bool IsEnoughWishes(int recipients);
         IEnumerable<string> GetNextWishes();
-        void SetWishes(IEnumerable<WishCategory> wishes);
     }
 }
