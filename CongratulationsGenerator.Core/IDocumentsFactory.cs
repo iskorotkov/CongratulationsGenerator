@@ -3,6 +3,6 @@
     public interface IDocumentsFactory
     {
         IDataTable OpenDataTable();
-        ITemplateDocument OpenTemplateDocument(string filename);
+        ITemplateDocument OpenTemplateDocument(string filename, string celebration);
     }
 }

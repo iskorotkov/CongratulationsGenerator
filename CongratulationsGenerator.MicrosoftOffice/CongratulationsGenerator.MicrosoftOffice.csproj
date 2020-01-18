@@ -48,10 +48,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExcelDoc.cs" />
-    <Compile Include="MicrosoftOfficeDocsFactory.cs" />
+    <Compile Include="ExcelBackendFactory.cs" />
+    <Compile Include="ExcelReader.cs" />
+    <Compile Include="IConfigBackend.cs" />
+    <Compile Include="IConfigBackendFactory.cs" />
+    <Compile Include="OfficeConfigFactory.cs" />
+    <Compile Include="OfficeDocsFactory.cs" />
+    <Compile Include="OfficeConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WordDoc.cs" />
+    <Compile Include="WordWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

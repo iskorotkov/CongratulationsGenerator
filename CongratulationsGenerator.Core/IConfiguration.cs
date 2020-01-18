@@ -4,7 +4,8 @@
     {
         string GetFont();
         string GetTemplatePath();
-        string GetParameter(string param);
-        bool HasParameter(string param);
+        string Get(string param);
+        bool Exists(string param);
+        string TryToGet(string param);
     }
 }

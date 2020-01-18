@@ -21,7 +21,10 @@ namespace CongratulationsGenerator.Core
             var config = _configurationFactory.GetConfiguration();
 
             var table = _documentsFactory.OpenDataTable();
-            var template = _documentsFactory.OpenTemplateDocument(config.GetTemplatePath());
+            var template = _documentsFactory.OpenTemplateDocument(
+                config.GetTemplatePath(),
+                config.Get("Celebration")
+            );
 
             var recipients = table.GetRecipients();
             var wishes = table.GetWishes();
@@ -29,7 +32,7 @@ namespace CongratulationsGenerator.Core
             table.Close();
 
             var distributor = _distributorFactory.CreateDistributor(wishes);
-            
+
             // TODO: Check whether there are enough wishes.
 
             foreach (var recipient in recipients)
@@ -43,7 +46,7 @@ namespace CongratulationsGenerator.Core
             template.ApplyFont(config.GetFont());
             template.ShowDoc();
 
-            var filename = Path.Combine(config.GetParameter("output path"), config.GetParameter("Default file name"));
+            var filename = Path.Combine(config.Get("output path"), config.Get("Default file name"));
             template.SaveDoc(filename);
         }
     }

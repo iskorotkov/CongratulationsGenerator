@@ -5,26 +5,21 @@ using Microsoft.Office.Interop.Word;
 
 namespace CongratulationsGenerator.MicrosoftOffice
 {
-    public class WordDoc : ITemplateDocument
+    public class WordWriter : ITemplateDocument
     {
-        private readonly string _filename;
         private readonly Application _app;
+        private readonly string _celebration;
         private readonly Document _doc;
+        private readonly string _filename;
 
         private bool _shouldAddTemplateList;
-        
-        public WordDoc(string filename)
+
+        public WordWriter(string filename, string celebration)
         {
             _app = new Application();
             _doc = _app.Documents.Add(filename);
             _filename = filename;
-        }
-
-        private void AddTemplateList()
-        {
-            _app.Selection.EndKey(WdUnits.wdStory);
-            _app.Selection.InsertNewPage();
-            _app.Selection.InsertFile(_filename, "", false, false, false);
+            _celebration = celebration;
         }
 
         public void AddRecipient(Recipient recipient, IEnumerable<string> wishes)
@@ -32,14 +27,16 @@ namespace CongratulationsGenerator.MicrosoftOffice
             if (_shouldAddTemplateList)
             {
                 AddTemplateList();
+                _shouldAddTemplateList = true;
             }
-
-            _shouldAddTemplateList = true;
             
             _doc.Bookmarks["Dear"].Range.Text = recipient.Gender.DearForm;
             _doc.Bookmarks["Name"].Range.Text = recipient.Name;
-            
-            // TODO: Set celebration from passed value.
+
+            if (_celebration != null)
+            {
+                _doc.Bookmarks["Celebration"].Range.Text = _celebration;
+            }
 
             var index = 1;
             foreach (var wish in wishes)
@@ -91,6 +88,13 @@ namespace CongratulationsGenerator.MicrosoftOffice
         public void ShowDoc()
         {
             _app.Visible = true;
+        }
+
+        private void AddTemplateList()
+        {
+            _app.Selection.EndKey(WdUnits.wdStory);
+            _app.Selection.InsertNewPage();
+            _app.Selection.InsertFile(_filename, "", false, false, false);
         }
     }
 }
