@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CongratulationsGenerator.Core;
-using static CongratulationsGenerator.WishesDistributors.Distributor;
 
 namespace CongratulationsGenerator.WishesDistributors
 {

@@ -4,7 +4,7 @@ using CongratulationsGenerator.Core;
 
 namespace CongratulationsGenerator.WishesDistributors
 {
-    public partial class Distributor : IWishesDistributor
+    public class Distributor : IWishesDistributor
     {
         public static IPermutationGeneratorFactory PermutationGeneratorFactory;
 
