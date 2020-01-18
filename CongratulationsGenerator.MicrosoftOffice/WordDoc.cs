@@ -37,6 +37,8 @@ namespace CongratulationsGenerator.MicrosoftOffice
             
             _doc.Bookmarks["Dear"].Range.Text = recipient.Gender.DearForm;
             _doc.Bookmarks["Name"].Range.Text = recipient.Name;
+            
+            // TODO: Set celebration from passed value.
 
             var index = 1;
             foreach (var wish in wishes)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using CongratulationsGenerator.Core;
 using Microsoft.Office.Interop.Excel;
 using Application = Microsoft.Office.Interop.Excel.Application;
@@ -7,10 +8,13 @@ using IDataTable = CongratulationsGenerator.Core.IDataTable;
 
 namespace CongratulationsGenerator.MicrosoftOffice
 {
+    // TODO: SRP
     public class ExcelDoc : IDataTable, IConfiguration
     {
         private readonly Application _app;
         private readonly Workbook _book;
+
+        private Dictionary<string, string> _preferences;
 
         public ExcelDoc(string filename)
         {
@@ -93,16 +97,48 @@ namespace CongratulationsGenerator.MicrosoftOffice
             _app.Quit();
         }
 
+        private void ReadPreferences()
+        {
+            _preferences = new Dictionary<string, string>();
+            var sheet = _book.Sheets["Preferences"];
+            var rows = sheet.UsedRange.Rows.Count;
+
+            for (var row = 1; row <= rows; row++)
+            {
+                var name = sheet.Cells[row, 1].Value.ToString();
+                var value = sheet.Cells[row, 2].Value.ToString();
+                _preferences.Add(name.ToLower(), value);
+            }
+        }
+
         public string GetFont()
         {
-            // TODO: Read font from config sheet.
-            return "Consolas";
+            return GetParameter("font");
         }
 
         public string GetTemplatePath()
         {
-            // TODO: Read template path from config sheet.
-            return @"C:\Projects\CongratulationsGenerator\Resources\Template.dotx";
+            return Path.Combine(GetParameter("resources path"), GetParameter("template file"));
+        }
+
+        public string GetParameter(string param)
+        {
+            if (_preferences == null)
+            {
+                ReadPreferences();
+            }
+
+            return _preferences[param.ToLower()];
+        }
+
+        public bool HasParameter(string param)
+        {
+            if (_preferences == null)
+            {
+                ReadPreferences();
+            }
+
+            return _preferences.ContainsKey(param.ToLower());
         }
     }
 }
