@@ -8,5 +8,6 @@ namespace CongratulationsGenerator.Core
         void ApplyFont(string font);
         void SaveDoc();
         void CloseDoc();
+        void ShowDoc();
     }
 }

@@ -24,7 +24,7 @@
             var recipients = table.GetRecipients();
             var wishes = table.GetWishes();
             
-            // TODO: Close data table.
+            table.Close();
 
             var distributor = _distributorFactory.CreateDistributor(wishes);
 
@@ -32,11 +32,14 @@
             {
                 var recipientWishes = distributor.GetNextWishes();
                 template.AddRecipient(recipient, recipientWishes);
+                
+                // TODO: Replace celebration name in text if needed.
             }
 
             template.ApplyFont(config.GetFont());
-            template.SaveDoc();
-            template.CloseDoc();
+            template.ShowDoc();
+            //template.SaveDoc();
+            //template.CloseDoc();
         }
     }
 }

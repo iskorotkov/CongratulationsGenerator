@@ -48,17 +48,23 @@ namespace CongratulationsGenerator.MicrosoftOffice
 
         public void ApplyFont(string font)
         {
-            throw new System.NotImplementedException();
+            // TODO: Apply font.
         }
 
         public void SaveDoc()
         {
+            // TODO: File save doesn't work correctly.
             _doc.Save();
         }
 
         public void CloseDoc()
         {
             _app.Quit(false);
+        }
+
+        public void ShowDoc()
+        {
+            _app.Visible = true;
         }
     }
 }
