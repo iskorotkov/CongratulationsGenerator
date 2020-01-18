@@ -31,7 +31,6 @@ namespace CongratulationsGenerator.Core
             table.Close();
 
             var distributor = _distributorFactory.CreateDistributor(wishes);
-
             if (distributor.IsEnoughWishes(recipients.Count))
             {
                 foreach (var recipient in recipients)
@@ -44,8 +43,10 @@ namespace CongratulationsGenerator.Core
                 template.ShowDoc();
 
                 var filename = Path.Combine(config.Get("output path"), config.Get("Default file name"));
+                
+                // TODO: Add config values for auto saving and auto closing.
                 template.SaveDoc(filename);
-                template.CloseDoc();
+                // template.CloseDoc();
             }
             else
             {
