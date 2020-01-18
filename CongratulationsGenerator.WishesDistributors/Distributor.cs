@@ -10,10 +10,11 @@ namespace CongratulationsGenerator.WishesDistributors
 
         public Distributor(IEnumerable<WishCategory> wishCategories)
         {
-            _wishCategories = wishCategories;
+            _wishCategories = wishCategories.ToList();
+            _wishCategories.Sort((e1, e2) => e2.Wishes.Count.CompareTo(e1.Wishes.Count));
         }
 
-        private readonly IEnumerable<WishCategory> _wishCategories;
+        private readonly List<WishCategory> _wishCategories;
         private List<Triple> _optimalVariants;
         private List<Triple> _otherVariants;
         private bool _generated;
