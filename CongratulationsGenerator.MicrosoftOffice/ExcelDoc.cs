@@ -94,6 +94,7 @@ namespace CongratulationsGenerator.MicrosoftOffice
 
         public void Close()
         {
+            _book.Close(false);
             _app.Quit();
         }
 

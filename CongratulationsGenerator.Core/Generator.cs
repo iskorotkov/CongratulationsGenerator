@@ -1,4 +1,6 @@
-﻿namespace CongratulationsGenerator.Core
+﻿using System.IO;
+
+namespace CongratulationsGenerator.Core
 {
     public class Generator
     {
@@ -23,7 +25,7 @@
 
             var recipients = table.GetRecipients();
             var wishes = table.GetWishes();
-            
+
             table.Close();
 
             var distributor = _distributorFactory.CreateDistributor(wishes);
@@ -32,14 +34,15 @@
             {
                 var recipientWishes = distributor.GetNextWishes();
                 template.AddRecipient(recipient, recipientWishes);
-                
+
                 // TODO: Replace celebration name in text if needed.
             }
 
             template.ApplyFont(config.GetFont());
             template.ShowDoc();
-            //template.SaveDoc();
-            //template.CloseDoc();
+
+            var filename = Path.Combine(config.GetParameter("output path"), config.GetParameter("Default file name"));
+            template.SaveDoc(filename);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using CongratulationsGenerator.Core;
 using Microsoft.Office.Interop.Word;
 
@@ -50,17 +51,39 @@ namespace CongratulationsGenerator.MicrosoftOffice
 
         public void ApplyFont(string font)
         {
-            // TODO: Apply font.
+            foreach (Paragraph paragraph in _doc.Paragraphs)
+            {
+                paragraph.Range.Font.Name = font;
+            }
+
+            foreach (Shape shape in _doc.Shapes)
+            {
+                shape.TextFrame.TextRange.Font.Name = font;
+            }
         }
 
-        public void SaveDoc()
+        public void SaveDoc(string filename)
         {
-            // TODO: File save doesn't work correctly.
-            _doc.Save();
+            if (!File.Exists(filename))
+            {
+                _doc.SaveAs(filename);
+                return;
+            }
+
+            for (var i = 0; i < 1000; i++)
+            {
+                var path = filename + i;
+                if (File.Exists(path)) continue;
+                _doc.SaveAs(path);
+                return;
+            }
+            
+            throw new OutputFileSavingException();
         }
 
         public void CloseDoc()
         {
+            _doc.Close(false);
             _app.Quit(false);
         }
 

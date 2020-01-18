@@ -6,7 +6,7 @@ namespace CongratulationsGenerator.Core
     {
         void AddRecipient(Recipient recipient, IEnumerable<string> wishes);
         void ApplyFont(string font);
-        void SaveDoc();
+        void SaveDoc(string filename);
         void CloseDoc();
         void ShowDoc();
     }
