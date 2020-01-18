@@ -27,8 +27,8 @@ namespace CongratulationsGenerator.MicrosoftOffice
             if (_shouldAddTemplateList)
             {
                 AddTemplateList();
-                _shouldAddTemplateList = true;
             }
+            _shouldAddTemplateList = true;
             
             _doc.Bookmarks["Dear"].Range.Text = recipient.Gender.DearForm;
             _doc.Bookmarks["Name"].Range.Text = recipient.Name;
