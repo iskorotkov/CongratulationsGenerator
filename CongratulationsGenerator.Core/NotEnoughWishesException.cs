@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CongratulationsGenerator.WishesDistributors
+namespace CongratulationsGenerator.Core
 {
     public class NotEnoughWishesException : Exception
     {
