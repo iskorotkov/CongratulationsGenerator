@@ -5,12 +5,18 @@ using CongratulationsGenerator.MicrosoftOffice;
 
 namespace CongratulationsGenerator.Startup
 {
-    static class Startup
+    public static class Startup
     {
         public static void Main()
         {
+            var generator = InitializeGenerator();
+            generator.Generate();
+        }
+
+        public static Generator InitializeGenerator()
+        {
             const string config = @"C:\Projects\CongratulationsGenerator\Resources\Data.xlsx";
-            
+
             var officeFactory = new OfficeDocsFactory(config);
             var distributorFactory = new DistributorFactory();
             var configBackendFactory = new ExcelBackendFactory(config);
@@ -23,7 +29,7 @@ namespace CongratulationsGenerator.Startup
             Distributor.PermutationGeneratorFactory = new RandomInserterFactory();
 
             var generator = new Generator(officeFactory, distributorFactory, configFactory);
-            generator.Generate();
+            return generator;
         }
     }
 }

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CongratulationsGenerator.Wi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CongratulationsGenerator.Permutations", "CongratulationsGenerator.Permutations\CongratulationsGenerator.Permutations.csproj", "{EFB01225-F406-47C2-B2FF-2D639118E16D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CongratulationsGenerator.GUI", "CongratulationsGenerator.GUI\CongratulationsGenerator.GUI.csproj", "{53FE9B0F-A7FF-487B-8624-FBD9A5992D01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{EFB01225-F406-47C2-B2FF-2D639118E16D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFB01225-F406-47C2-B2FF-2D639118E16D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFB01225-F406-47C2-B2FF-2D639118E16D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53FE9B0F-A7FF-487B-8624-FBD9A5992D01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53FE9B0F-A7FF-487B-8624-FBD9A5992D01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53FE9B0F-A7FF-487B-8624-FBD9A5992D01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53FE9B0F-A7FF-487B-8624-FBD9A5992D01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
