@@ -9,6 +9,8 @@ namespace CongratulationsGenerator.WishesDistributors
         
         public void GenerateTriples(IReadOnlyList<List<string>> wishes)
         {
+            // TODO: Fix optimal triples generation.
+            
             var length = wishes.Count;
             for (var firstCategory = 0; firstCategory < length; firstCategory++)
             {
