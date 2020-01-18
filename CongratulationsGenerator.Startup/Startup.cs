@@ -8,13 +8,15 @@ namespace CongratulationsGenerator.Startup
     {
         public static void Main()
         {
-            var officeFactory = new MicrosoftOffice.MicrosoftOfficeFactory();
+            var officeFactory = new MicrosoftOffice.MicrosoftOfficeFactory(
+                @"C:\Projects\CongratulationsGenerator\Resources\Data.xlsx"
+            );
             var distributorFactory = new DistributorFactory();
-            
+
             Gender.Register(new Gender(@"^[мМmM].*", "Дорогой"));
             Gender.Register(new Gender(@"^[жЖwW].*", "Дорогая"));
             Gender.Register(new Gender(@"", "Дорогой(ая)"));
-            
+
             Distributor.PermutationGeneratorFactory = new RandomInserterFactory();
 
             var generator = new Generator(officeFactory, distributorFactory, officeFactory);
