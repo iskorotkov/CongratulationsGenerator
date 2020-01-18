@@ -52,6 +52,7 @@ namespace CongratulationsGenerator.MicrosoftOffice
         private void ReadPreferences()
         {
             _preferences = _configDoc.ReadPreferences();
+            _configDoc.Close();
         }
     }
 }

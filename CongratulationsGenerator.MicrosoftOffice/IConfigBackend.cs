@@ -5,5 +5,6 @@ namespace CongratulationsGenerator.MicrosoftOffice
     public interface IConfigBackend
     {
         Dictionary<string, string> ReadPreferences();
+        void Close();
     }
 }

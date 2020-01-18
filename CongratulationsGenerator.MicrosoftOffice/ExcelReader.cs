@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using CongratulationsGenerator.Core;
 using Microsoft.Office.Interop.Excel;
-using Application = Microsoft.Office.Interop.Excel.Application;
 using IDataTable = CongratulationsGenerator.Core.IDataTable;
 
 namespace CongratulationsGenerator.MicrosoftOffice
@@ -50,6 +49,9 @@ namespace CongratulationsGenerator.MicrosoftOffice
         {
             _book.Close(false);
             _app.Quit();
+            GC.Collect();
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(_book);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(_app);
         }
 
         // ReSharper disable once SuggestBaseTypeForParameter
