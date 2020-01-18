@@ -23,6 +23,8 @@
 
             var recipients = table.GetRecipients();
             var wishes = table.GetWishes();
+            
+            // TODO: Close data table.
 
             var distributor = _distributorFactory.CreateDistributor(wishes);
 
