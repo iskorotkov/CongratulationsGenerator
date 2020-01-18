@@ -1,17 +1,24 @@
 ﻿using System.Collections.Generic;
+using static CongratulationsGenerator.WishesDistributors.Distributor;
 
 namespace CongratulationsGenerator.WishesDistributors
 {
     public class TripleGenerator
     {
-        public List<Distributor.Triple> OptimalVariants { get; } = new List<Distributor.Triple>();
-        public List<Distributor.Triple> OtherVariants { get; } = new List<Distributor.Triple>();
-        
+        private List<int> _wishesUsedPerCategory;
+        public List<Triple> OptimalVariants { get; } = new List<Triple>();
+        public List<Triple> OtherVariants { get; } = new List<Triple>();
+
         public void GenerateTriples(IReadOnlyList<List<string>> wishes)
         {
-            // TODO: Fix optimal triples generation.
-            
             var length = wishes.Count;
+
+            _wishesUsedPerCategory = new List<int>(length);
+            for (var i = 0; i < length; i++)
+            {
+                _wishesUsedPerCategory.Add(0);
+            }
+
             for (var firstCategory = 0; firstCategory < length; firstCategory++)
             {
                 for (var secondCategory = firstCategory + 1; secondCategory < length; secondCategory++)
@@ -33,9 +40,10 @@ namespace CongratulationsGenerator.WishesDistributors
                 {
                     for (var thirdWish = 0; thirdWish < wishes[thirdCategory].Count; thirdWish++)
                     {
-                        ForEveryWishTriple(wishes, firstCategory, firstWish, secondCategory, secondWish,
-                            thirdCategory,
-                            thirdWish);
+                        ForEveryWishTriple(wishes, 
+                            firstCategory, firstWish, 
+                            secondCategory, secondWish,
+                            thirdCategory, thirdWish);
                     }
                 }
             }
@@ -46,19 +54,23 @@ namespace CongratulationsGenerator.WishesDistributors
             int secondCategory, int secondWish,
             int thirdCategory, int thirdWish)
         {
-            var collectionToAdd = firstWish == secondWish && secondWish == thirdWish
-                ? OptimalVariants
-                : OtherVariants;
+            var collectionToAdd = OtherVariants;
+            if (firstWish >= _wishesUsedPerCategory[firstCategory]
+                && secondWish >= _wishesUsedPerCategory[secondCategory]
+                && thirdWish >= _wishesUsedPerCategory[thirdCategory])
+            {
+                collectionToAdd = OptimalVariants;
+
+                _wishesUsedPerCategory[firstCategory]++;
+                _wishesUsedPerCategory[secondCategory]++;
+                _wishesUsedPerCategory[thirdCategory]++;
+            }
 
             var first = wishes[firstCategory][firstWish];
             var second = wishes[secondCategory][secondWish];
             var third = wishes[thirdCategory][thirdWish];
-            AddTriple(collectionToAdd, first, second, third);
-        }
 
-        private static void AddTriple(ICollection<Distributor.Triple> collectionToAdd, string first, string second, string third)
-        {
-            collectionToAdd.Add(new Distributor.Triple(first, second, third));
+            collectionToAdd.Add(new Triple(first, second, third));
         }
     }
 }

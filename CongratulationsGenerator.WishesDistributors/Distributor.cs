@@ -45,7 +45,7 @@ namespace CongratulationsGenerator.WishesDistributors
             }
 
             var result = collectionToUse.First();
-            _optimalVariants.Remove(result);
+            collectionToUse.Remove(result);
             return result.Wishes();
         }
 
