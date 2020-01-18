@@ -27,6 +27,8 @@ namespace CongratulationsGenerator.GUI
                 try
                 {
                     generator.Generate();
+                    MessageBox.Show("Letters generation completed!", "Success", MessageBoxButton.OK,
+                        MessageBoxImage.Information);
                 }
                 catch (Exception exception)
                 {
