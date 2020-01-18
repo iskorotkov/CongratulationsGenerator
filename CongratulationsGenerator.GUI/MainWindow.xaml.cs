@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace CongratulationsGenerator.GUI
 {
@@ -16,11 +18,23 @@ namespace CongratulationsGenerator.GUI
             UnlockButton();
         }
 
-        private async void Generate(object sender, System.Windows.RoutedEventArgs e)
+        private async void Generate(object sender, RoutedEventArgs e)
         {
             var generator = Startup.Startup.InitializeGenerator();
             LockButton();
-            await Task.Run(generator.Generate);
+            await Task.Run(() =>
+            {
+                try
+                {
+                    generator.Generate();
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.Message, "Something bad happened!", MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    throw;
+                }
+            });
             UnlockButton();
         }
 
