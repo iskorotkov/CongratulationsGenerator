@@ -102,7 +102,7 @@ namespace CongratulationsGenerator.MicrosoftOffice
         public string GetTemplatePath()
         {
             // TODO: Read template path from config sheet.
-            return @"C:\Projects\CongratulationsGenerator\Resources\Congratulations letter template.dotx";
+            return @"C:\Projects\CongratulationsGenerator\Resources\Template.dotx";
         }
     }
 }
