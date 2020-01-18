@@ -29,6 +29,8 @@ namespace CongratulationsGenerator.Core
             table.Close();
 
             var distributor = _distributorFactory.CreateDistributor(wishes);
+            
+            // TODO: Check whether there are enough wishes.
 
             foreach (var recipient in recipients)
             {
