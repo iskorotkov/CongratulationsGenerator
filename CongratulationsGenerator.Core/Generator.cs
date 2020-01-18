@@ -23,7 +23,7 @@ namespace CongratulationsGenerator.Core
             var table = _documentsFactory.OpenDataTable();
             var template = _documentsFactory.OpenTemplateDocument(
                 config.GetTemplatePath(),
-                config.Get("Celebration")
+                config.Get("Celebration name")
             );
 
             var recipients = table.GetRecipients();
