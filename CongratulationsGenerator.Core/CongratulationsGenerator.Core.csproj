@@ -52,6 +52,7 @@
     <Compile Include="IConfiguration.cs" />
     <Compile Include="IDocumentsFactory.cs" />
     <Compile Include="ITemplateDocument.cs" />
+    <Compile Include="NotEnoughWishesException.cs" />
     <Compile Include="OutputFileSavingException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IDataTable.cs" />
