@@ -8,16 +8,15 @@ namespace CongratulationsGenerator.WishesDistributors
     {
         public static IPermutationGeneratorFactory PermutationGeneratorFactory;
 
-        public Distributor(IEnumerable<WishCategory> wishCategories)
-        {
-            _wishCategories = wishCategories.ToList();
-            _wishCategories.Sort((e1, e2) => e2.Wishes.Count.CompareTo(e1.Wishes.Count));
-        }
-
         private readonly List<WishCategory> _wishCategories;
         private List<Triple> _optimalVariants;
         private List<Triple> _otherVariants;
-        private bool _generated;
+
+        public Distributor(IEnumerable<WishCategory> wishCategories)
+        {
+            _wishCategories = wishCategories.ToList();
+            ReverseSortByWishesCount();
+        }
 
         public bool IsEnoughWishes(int recipients)
         {
@@ -25,29 +24,35 @@ namespace CongratulationsGenerator.WishesDistributors
             return variants >= recipients;
         }
 
-
         public IEnumerable<string> GetNextWishes()
         {
-            if (!_generated)
+            if (_optimalVariants == null)
             {
                 GenerateTriples();
-                _generated = true;
             }
 
-            var collectionToUse = _optimalVariants.Count > 0
-                ? _optimalVariants
-                : _otherVariants.Count > 0
-                    ? _otherVariants
-                    : null;
-
-            if (collectionToUse == null)
-            {
-                throw new NotEnoughWishesException();
-            }
-
+            var collectionToUse = SelectCollection();
             var result = collectionToUse.First();
             collectionToUse.Remove(result);
             return result.Wishes();
+        }
+
+        private List<Triple> SelectCollection()
+        {
+            if (_optimalVariants.Count > 0)
+            {
+                return _optimalVariants;
+            }
+
+            if (_otherVariants.Count > 0)
+                return _otherVariants;
+
+            throw new NotEnoughWishesException();
+        }
+
+        private void ReverseSortByWishesCount()
+        {
+            _wishCategories.Sort((e1, e2) => e2.Wishes.Count.CompareTo(e1.Wishes.Count));
         }
 
         private void GenerateTriples()
