@@ -52,14 +52,8 @@ namespace CongratulationsGenerator.WishesDistributors
         private void GenerateTriples()
         {
             var permutationsGenerator = PermutationGeneratorFactory.MakePermutationGenerator();
-
-            var wishes = _wishCategories
-                .Select(category => permutationsGenerator.MakePermutation(category.Wishes).ToList())
-                .ToList();
-            wishes = permutationsGenerator.MakePermutation(wishes).ToList();
-
             var tripleGenerator = new TripleGenerator();
-            tripleGenerator.GenerateTriples(wishes);
+            tripleGenerator.GenerateTriples(_wishCategories.ToList(), permutationsGenerator);
 
             _optimalVariants = tripleGenerator.OptimalVariants;
             _otherVariants = tripleGenerator.OtherVariants;

@@ -8,10 +8,10 @@ namespace CongratulationsGenerator.Core
         public WishCategory(string name, IEnumerable<string> wishes)
         {
             Name = name;
-            Wishes = wishes.ToHashSet();
+            Wishes = wishes.ToList();
         }
 
         public string Name { get; }
-        public HashSet<string> Wishes { get; }
+        public List<string> Wishes { get; }
     }
 }

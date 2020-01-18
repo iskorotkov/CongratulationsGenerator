@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using CongratulationsGenerator.Core;
 using static CongratulationsGenerator.WishesDistributors.Distributor;
 
 namespace CongratulationsGenerator.WishesDistributors
@@ -6,19 +8,26 @@ namespace CongratulationsGenerator.WishesDistributors
     public class TripleGenerator
     {
         private List<int> _wishesUsedPerCategory;
-        public List<Triple> OptimalVariants { get; } = new List<Triple>();
-        public List<Triple> OtherVariants { get; } = new List<Triple>();
+        public List<Triple> OptimalVariants { get; private set; } = new List<Triple>();
+        public List<Triple> OtherVariants { get; private set; } = new List<Triple>();
 
-        public void GenerateTriples(IReadOnlyList<List<string>> wishes)
+        public void GenerateTriples(IReadOnlyList<WishCategory> wishes, IPermutationGenerator permutationGenerator)
         {
-            var length = wishes.Count;
-
-            _wishesUsedPerCategory = new List<int>(length);
-            for (var i = 0; i < length; i++)
+            _wishesUsedPerCategory = new List<int>(wishes.Count);
+            for (var i = 0; i < wishes.Count; i++)
             {
                 _wishesUsedPerCategory.Add(0);
             }
 
+            IterateOverCategories(wishes);
+            
+            OptimalVariants = permutationGenerator.MakePermutation(OptimalVariants).ToList();
+            OtherVariants = permutationGenerator.MakePermutation(OtherVariants).ToList();
+        }
+
+        private void IterateOverCategories(IReadOnlyList<WishCategory> wishes)
+        {
+            var length = wishes.Count;
             for (var firstCategory = 0; firstCategory < length; firstCategory++)
             {
                 for (var secondCategory = firstCategory + 1; secondCategory < length; secondCategory++)
@@ -31,14 +40,14 @@ namespace CongratulationsGenerator.WishesDistributors
             }
         }
 
-        private void ForEveryCategoryTriple(IReadOnlyList<List<string>> wishes, int firstCategory, int secondCategory,
+        private void ForEveryCategoryTriple(IReadOnlyList<WishCategory> wishes, int firstCategory, int secondCategory,
             int thirdCategory)
         {
-            for (var firstWish = 0; firstWish < wishes[firstCategory].Count; firstWish++)
+            for (var firstWish = 0; firstWish < wishes[firstCategory].Wishes.Count; firstWish++)
             {
-                for (var secondWish = 0; secondWish < wishes[secondCategory].Count; secondWish++)
+                for (var secondWish = 0; secondWish < wishes[secondCategory].Wishes.Count; secondWish++)
                 {
-                    for (var thirdWish = 0; thirdWish < wishes[thirdCategory].Count; thirdWish++)
+                    for (var thirdWish = 0; thirdWish < wishes[thirdCategory].Wishes.Count; thirdWish++)
                     {
                         ForEveryWishTriple(wishes, 
                             firstCategory, firstWish, 
@@ -49,7 +58,7 @@ namespace CongratulationsGenerator.WishesDistributors
             }
         }
 
-        private void ForEveryWishTriple(IReadOnlyList<List<string>> wishes,
+        private void ForEveryWishTriple(IReadOnlyList<WishCategory> wishes,
             int firstCategory, int firstWish,
             int secondCategory, int secondWish,
             int thirdCategory, int thirdWish)
@@ -66,9 +75,9 @@ namespace CongratulationsGenerator.WishesDistributors
                 _wishesUsedPerCategory[thirdCategory]++;
             }
 
-            var first = wishes[firstCategory][firstWish];
-            var second = wishes[secondCategory][secondWish];
-            var third = wishes[thirdCategory][thirdWish];
+            var first = wishes[firstCategory].Wishes[firstWish];
+            var second = wishes[secondCategory].Wishes[secondWish];
+            var third = wishes[thirdCategory].Wishes[thirdWish];
 
             collectionToAdd.Add(new Triple(first, second, third));
         }
