@@ -25,6 +25,8 @@ namespace CongratulationsGenerator.Core
                 config.Get("Celebration name")
             );
             
+            // TODO: Make IO operations async or in another thread.
+            
             var table = _documentsFactory.OpenDataTable();
             var recipients = table.GetRecipients().ToList();
             var wishes = table.GetWishes();
