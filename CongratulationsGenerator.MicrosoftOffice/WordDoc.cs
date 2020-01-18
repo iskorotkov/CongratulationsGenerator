@@ -64,16 +64,17 @@ namespace CongratulationsGenerator.MicrosoftOffice
 
         public void SaveDoc(string filename)
         {
-            if (!File.Exists(filename))
+            const string extension = "docx";
+            if (!File.Exists(Path.ChangeExtension(filename, extension)))
             {
                 _doc.SaveAs(filename);
                 return;
             }
 
-            for (var i = 0; i < 1000; i++)
+            for (var i = 1; i < 1000; i++)
             {
                 var path = filename + i;
-                if (File.Exists(path)) continue;
+                if (File.Exists(Path.ChangeExtension(path, extension))) continue;
                 _doc.SaveAs(path);
                 return;
             }
