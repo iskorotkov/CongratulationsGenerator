@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace CongratulationsGenerator.GUI
@@ -24,7 +25,7 @@ namespace CongratulationsGenerator.GUI
             try
             {
                 var generator = Startup.Startup.InitializeGenerator();
-                await generator.Generate();
+                await Task.Run(generator.Generate);
                 MessageBox.Show("Letters generation completed!", "Success", MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }

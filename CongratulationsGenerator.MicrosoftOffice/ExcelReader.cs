@@ -18,7 +18,7 @@ namespace CongratulationsGenerator.MicrosoftOffice
             {
                 _book = _app.Workbooks.Open(filename, null, true);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _app.Quit();
                 GC.Collect();

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace CongratulationsGenerator.Core
 {
@@ -25,7 +24,7 @@ namespace CongratulationsGenerator.Core
             _configurationFactory = configurationFactory;
         }
 
-        public async Task Generate()
+        public void Generate()
         {
             try
             {
@@ -33,7 +32,7 @@ namespace CongratulationsGenerator.Core
                 _distributor = _distributorFactory.CreateDistributor(wishes);
                 if (_distributor.IsEnoughWishes(recipients.Count))
                 {
-                    await GenerateLettersText(recipients);
+                    GenerateLettersText(recipients);
                     FinishGeneration();
                 }
                 else
@@ -59,12 +58,12 @@ namespace CongratulationsGenerator.Core
             return (recipients, wishes);
         }
 
-        private async Task GenerateLettersText(IEnumerable<Recipient> recipients)
+        private void GenerateLettersText(IEnumerable<Recipient> recipients)
         {
             _config = _configurationFactory.GetConfiguration();
             _template = _documentsFactory.OpenTemplateDocument(_config.TemplatePath, _config.CelebrationName);
-            await AddRecipients(recipients);
-            await _template.ApplyFont(_config.Font);
+            AddRecipients(recipients);
+            _template.ApplyFont(_config.Font);
         }
 
         private void FinishGeneration()
@@ -75,23 +74,12 @@ namespace CongratulationsGenerator.Core
             _template.ShowDoc();
         }
 
-        private async Task AddRecipients(IEnumerable<Recipient> recipients)
+        private void AddRecipients(IEnumerable<Recipient> recipients)
         {
-            Task addRecipientTask = null;
             foreach (var recipient in recipients)
             {
                 var recipientWishes = _distributor.GetNextWishes();
-                if (addRecipientTask != null)
-                {
-                    await addRecipientTask;
-                }
-
-                addRecipientTask = _template.AddRecipient(recipient, recipientWishes);
-            }
-
-            if (addRecipientTask != null)
-            {
-                await addRecipientTask;
+                _template.AddRecipient(recipient, recipientWishes);
             }
         }
     }

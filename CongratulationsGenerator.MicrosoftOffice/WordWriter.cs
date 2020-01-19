@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using CongratulationsGenerator.Core;
 using Microsoft.Office.Interop.Word;
-using Task = System.Threading.Tasks.Task;
 
 namespace CongratulationsGenerator.MicrosoftOffice
 {
@@ -24,7 +22,7 @@ namespace CongratulationsGenerator.MicrosoftOffice
             {
                 _doc = _app.Documents.Add(filename);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _app.Quit(false);
                 GC.Collect();
@@ -36,7 +34,7 @@ namespace CongratulationsGenerator.MicrosoftOffice
             _celebration = celebration;
         }
 
-        public async Task AddRecipient(Recipient recipient, IEnumerable<string> wishes)
+        public void AddRecipient(Recipient recipient, IEnumerable<string> wishes)
         {
             if (_shouldAddTemplateList)
             {
@@ -45,53 +43,33 @@ namespace CongratulationsGenerator.MicrosoftOffice
 
             _shouldAddTemplateList = true;
 
-            var tasks = new List<Task>
+            _doc.Bookmarks["Dear"].Range.Text = recipient.Gender.DearForm;
+            _doc.Bookmarks["Name"].Range.Text = recipient.Name;
+            if (_celebration != null)
             {
-                Task.Run(() => { _doc.Bookmarks["Dear"].Range.Text = recipient.Gender.DearForm; }),
-                Task.Run(() => { _doc.Bookmarks["Name"].Range.Text = recipient.Name; }),
-                Task.Run(() =>
-                {
-                    if (_celebration != null)
-                    {
-                        _doc.Bookmarks["Celebration"].Range.Text = _celebration;
-                    }
-                })
-            };
+                _doc.Bookmarks["Celebration"].Range.Text = _celebration;
+            }
 
             var index = 1;
             foreach (var wish in wishes)
             {
-                var i = index;
-                var w = wish;
-                tasks.Add(Task.Run(() => { _doc.Bookmarks["Wish" + i].Range.Text = w; }));
+                _doc.Bookmarks["Wish" + index].Range.Text = wish;
                 index++;
             }
-
-            await Task.WhenAll(tasks);
         }
 
-        public async Task ApplyFont(string font)
+        public void ApplyFont(string font)
         {
-            var paragraphsTask = Task.Run(() => _doc.Paragraphs);
-            var shapesTask = Task.Run(() => _doc.Shapes);
-
-            var paragraphs = await paragraphsTask;
-            var tasks = (from Paragraph paragraph in paragraphs
-                select Task.Run(() =>
-                {
-                    var p = paragraph;
-                    p.Range.Font.Name = font;
-                })).ToList();
-
-            var shapes = await shapesTask;
-            tasks.AddRange(from Shape shape in shapes
-                select Task.Run(() =>
-                {
-                    var s = shape;
-                    s.TextFrame.TextRange.Font.Name = font;
-                }));
-
-            await Task.WhenAll(tasks);
+            var paragraphs = _doc.Paragraphs;
+            var shapes = _doc.Shapes;
+            foreach (Paragraph paragraph in paragraphs)
+            {
+                paragraph.Range.Font.Name = font;
+            }
+            foreach (Shape shape in shapes)
+            {
+                shape.TextFrame.TextRange.Font.Name = font;
+            }
         }
 
         public void SaveDoc(string filename)
