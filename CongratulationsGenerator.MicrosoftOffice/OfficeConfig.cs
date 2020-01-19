@@ -12,10 +12,7 @@ namespace CongratulationsGenerator.MicrosoftOffice
             try
             {
                 configDoc = configDocFactory.OpenConfig();
-                foreach (var value in configDoc.ReadPreferences())
-                {
-                    Preferences.Add(value.Key.ToLower(), value.Value);
-                }
+                PreprocessPreferences(configDoc.ReadPreferences());
             }
             finally
             {
@@ -23,12 +20,19 @@ namespace CongratulationsGenerator.MicrosoftOffice
             }
         }
 
-
         public string Font => Preferences["font"];
         public string TemplatePath => Path.Combine(Preferences["resources path"], Preferences["template file"]);
         public string OutputPath => Preferences["output path"];
         public string DefaultFilename => Preferences["default file name"];
         public string CelebrationName => Preferences["celebration name"];
         public Dictionary<string, string> Preferences { get; } = new Dictionary<string, string>();
+
+        private void PreprocessPreferences(Dictionary<string, string> preferences)
+        {
+            foreach (var value in preferences)
+            {
+                Preferences.Add(value.Key.ToLower(), value.Value);
+            }
+        }
     }
 }
