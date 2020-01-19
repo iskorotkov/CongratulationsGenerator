@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CongratulationsGenerator.Core
 {
@@ -17,21 +18,22 @@ namespace CongratulationsGenerator.Core
             _configurationFactory = configurationFactory;
         }
 
-        public void Generate()
+        public async Task Generate()
         {
-            var config = _configurationFactory.GetConfiguration();
+            var configTask = Task.Run(_configurationFactory.GetConfiguration);
+            var tableTask = Task.Run(_documentsFactory.OpenDataTable);
+
+            var config = await configTask;
             var template = _documentsFactory.OpenTemplateDocument(
                 config.GetTemplatePath(),
                 config.Get("Celebration name")
             );
-            
-            // TODO: Make IO operations async or in another thread.
-            
-            var table = _documentsFactory.OpenDataTable();
+
+            var table = await tableTask;
             var recipients = table.GetRecipients().ToList();
             var wishes = table.GetWishes();
-            table.Close();
-
+            var closeTableTask = Task.Run(table.Close);
+            
             var distributor = _distributorFactory.CreateDistributor(wishes);
             if (distributor.IsEnoughWishes(recipients.Count))
             {
@@ -44,15 +46,17 @@ namespace CongratulationsGenerator.Core
                 template.ApplyFont(config.GetFont());
                 template.ShowDoc();
 
-                var filename = Path.Combine(config.Get("output path"), config.Get("Default file name"));
-                
                 // TODO: Add config values for auto saving and auto closing.
+
+                var filename = Path.Combine(config.Get("output path"), config.Get("Default file name"));
                 template.SaveDoc(filename);
-                // template.CloseDoc();
+                
+                await closeTableTask;
             }
             else
             {
-                template.CloseDoc();
+                var closeDocTask = Task.Run(template.CloseDoc);
+                await Task.WhenAll(closeTableTask, closeDocTask);
                 throw new NotEnoughWishesException();
             }
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace CongratulationsGenerator.GUI
@@ -20,23 +19,21 @@ namespace CongratulationsGenerator.GUI
 
         private async void Generate(object sender, RoutedEventArgs e)
         {
-            var generator = Startup.Startup.InitializeGenerator();
             LockButton();
-            await Task.Run(() =>
+
+            try
             {
-                try
-                {
-                    generator.Generate();
-                    MessageBox.Show("Letters generation completed!", "Success", MessageBoxButton.OK,
-                        MessageBoxImage.Information);
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message, "Something bad happened!", MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    throw;
-                }
-            });
+                var generator = Startup.Startup.InitializeGenerator();
+                await generator.Generate();
+                MessageBox.Show("Letters generation completed!", "Success", MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, "Something bad happened!", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+
             UnlockButton();
         }
 

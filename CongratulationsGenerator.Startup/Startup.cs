@@ -1,4 +1,6 @@
-﻿using CongratulationsGenerator.Core;
+﻿using System;
+using System.Threading.Tasks;
+using CongratulationsGenerator.Core;
 using CongratulationsGenerator.Permutations;
 using CongratulationsGenerator.WishesDistributors;
 using CongratulationsGenerator.MicrosoftOffice;
@@ -7,10 +9,11 @@ namespace CongratulationsGenerator.Startup
 {
     public static class Startup
     {
-        public static void Main()
+        public static async Task Main()
         {
             var generator = InitializeGenerator();
-            generator.Generate();
+            await generator.Generate();
+            Console.WriteLine("Letters generation completed!");
         }
 
         public static Generator InitializeGenerator()
