@@ -1,11 +1,14 @@
-﻿namespace CongratulationsGenerator.Core
+﻿using System.Collections.Generic;
+
+namespace CongratulationsGenerator.Core
 {
     public interface IConfiguration
     {
-        string GetFont();
-        string GetTemplatePath();
-        string Get(string param);
-        bool Exists(string param);
-        string TryToGet(string param);
+        string Font { get; }
+        string TemplatePath { get; }
+        string OutputPath { get; }
+        string DefaultFilename { get; }
+        string CelebrationName { get; }
+        Dictionary<string, string> Preferences { get; }
     }
 }

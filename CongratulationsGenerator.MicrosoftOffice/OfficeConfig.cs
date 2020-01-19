@@ -6,53 +6,28 @@ namespace CongratulationsGenerator.MicrosoftOffice
 {
     public class OfficeConfig : IConfiguration
     {
-        private readonly IConfigBackend _configDoc;
-        private Dictionary<string, string> _preferences;
-
         public OfficeConfig(IConfigBackendFactory configDocFactory)
         {
-            _configDoc = configDocFactory.OpenConfig();
-        }
-
-        public string GetFont()
-        {
-            return Get("font");
-        }
-
-        public string GetTemplatePath()
-        {
-            return Path.Combine(Get("resources path"), Get("template file"));
-        }
-
-        public string Get(string param)
-        {
-            if (_preferences == null)
+            var configDoc = configDocFactory.OpenConfig();
+            try
             {
-                ReadPreferences();
+                foreach (var value in configDoc.ReadPreferences())
+                {
+                    Preferences.Add(value.Key.ToLower(), value.Value);
+                }
             }
-
-            return _preferences[param.ToLower()];
-        }
-
-        public bool Exists(string param)
-        {
-            if (_preferences == null)
+            finally
             {
-                ReadPreferences();
+                configDoc.Close();
             }
-
-            return _preferences.ContainsKey(param.ToLower());
         }
 
-        public string TryToGet(string param)
-        {
-            return Exists(param) ? Get(param) : null;
-        }
 
-        private void ReadPreferences()
-        {
-            _preferences = _configDoc.ReadPreferences();
-            _configDoc.Close();
-        }
+        public string Font => Preferences["font"];
+        public string TemplatePath => Path.Combine(Preferences["resources path"], Preferences["template file"]);
+        public string OutputPath => Preferences["output path"];
+        public string DefaultFilename => Preferences["default file name"];
+        public string CelebrationName => Preferences["celebration name"];
+        public Dictionary<string, string> Preferences { get; } = new Dictionary<string, string>();
     }
 }

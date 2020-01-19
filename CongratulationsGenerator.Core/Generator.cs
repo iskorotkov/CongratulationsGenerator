@@ -53,7 +53,7 @@ namespace CongratulationsGenerator.Core
             }
         }
 
-        private async Task GenerateLettersText(List<Recipient> recipients)
+        private async Task GenerateLettersText(IEnumerable<Recipient> recipients)
         {
             Task addRecipientTask = null;
             foreach (var recipient in recipients)
@@ -72,11 +72,11 @@ namespace CongratulationsGenerator.Core
                 await addRecipientTask;
             }
 
-            await _template.ApplyFont(_config.GetFont());
+            await _template.ApplyFont(_config.Font);
 
             // TODO: Add config values for auto saving and auto closing.
 
-            var filename = Path.Combine(_config.Get("Output path"), _config.Get("Default file name"));
+            var filename = Path.Combine(_config.OutputPath, _config.DefaultFilename);
             _cleanupTasks.Add(Task.Run(() => _template.SaveDoc(filename)));
             _cleanupTasks.Add(Task.Run(_template.ShowDoc));
         }
@@ -88,8 +88,8 @@ namespace CongratulationsGenerator.Core
 
             _config = await configTask;
             _template = _documentsFactory.OpenTemplateDocument(
-                _config.GetTemplatePath(),
-                _config.Get("Celebration name")
+                _config.TemplatePath,
+                _config.CelebrationName
             );
 
             _table = await tableTask;
