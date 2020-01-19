@@ -12,17 +12,24 @@ namespace CongratulationsGenerator.Startup
         public static async Task Main()
         {
             var generator = InitializeGenerator();
-            await generator.Generate();
-            Console.WriteLine("Letters generation completed!");
+            try
+            {
+                await generator.Generate();
+                Console.WriteLine("Letters generation completed!");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Something bad happened!\n\n{e.Message}");
+            }
         }
 
         public static Generator InitializeGenerator()
         {
-            const string config = @"C:\Projects\CongratulationsGenerator\Resources\Data.xlsx";
+            const string filename = @"C:\Projects\CongratulationsGenerator\Resources\Data.xlsx";
 
-            var officeFactory = new OfficeDocsFactory(config);
+            var officeFactory = new OfficeDocsFactory(filename);
             var distributorFactory = new DistributorFactory();
-            var configBackendFactory = new ExcelBackendFactory(config);
+            var configBackendFactory = new ExcelBackendFactory(filename);
             var configFactory = new OfficeConfigFactory(configBackendFactory);
 
             Gender.Register(new Gender(@"^[мМmM].*", "Дорогой"));
