@@ -54,7 +54,6 @@ namespace CongratulationsGenerator.Core
             _table = _documentsFactory.OpenDataTable();
             var recipients = _table.GetRecipients().ToList();
             var wishes = _table.GetWishes();
-            // TODO: Await?
             _table.Close();
             _table = null;
             return (recipients, wishes);
@@ -72,7 +71,6 @@ namespace CongratulationsGenerator.Core
         {
             // TODO: Add config values for auto saving and auto closing.
             var filename = Path.Combine(_config.OutputPath, _config.DefaultFilename);
-            // TODO: Await?
             _template.SaveDoc(filename);
             _template.ShowDoc();
         }
