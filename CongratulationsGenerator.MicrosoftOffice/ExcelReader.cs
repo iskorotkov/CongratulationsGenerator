@@ -95,7 +95,17 @@ namespace CongratulationsGenerator.MicrosoftOffice
             // Each column is a separate wishes category.
             for (var column = 1; column <= columns; column++)
             {
-                string name = sheet.Cells[1, column].Value.ToString();
+                string name;
+                try
+                {
+                    name = sheet.Cells[1, column].Value.ToString();
+                }
+                catch (Exception)
+                {
+                    // Probably the column is missing. Let's proceed to the next one.
+                    continue;
+                }
+
                 var wishesInCategory = new HashSet<string>();
 
                 // The first line is the header line. Starting from the second one.
