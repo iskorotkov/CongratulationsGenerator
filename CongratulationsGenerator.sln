@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CongratulationsGenerator.Pe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CongratulationsGenerator.GUI", "CongratulationsGenerator.GUI\CongratulationsGenerator.GUI.csproj", "{53FE9B0F-A7FF-487B-8624-FBD9A5992D01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CongratulationsGenerator.WishesDistributors.Tests", "CongratulationsGenerator.WishesDistributors.Tests\CongratulationsGenerator.WishesDistributors.Tests.csproj", "{6E7183AF-9DC5-4467-A605-6241C4130E4E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{53FE9B0F-A7FF-487B-8624-FBD9A5992D01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53FE9B0F-A7FF-487B-8624-FBD9A5992D01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53FE9B0F-A7FF-487B-8624-FBD9A5992D01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E7183AF-9DC5-4467-A605-6241C4130E4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E7183AF-9DC5-4467-A605-6241C4130E4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E7183AF-9DC5-4467-A605-6241C4130E4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E7183AF-9DC5-4467-A605-6241C4130E4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
