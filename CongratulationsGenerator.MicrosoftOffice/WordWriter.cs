@@ -66,6 +66,7 @@ namespace CongratulationsGenerator.MicrosoftOffice
             {
                 paragraph.Range.Font.Name = font;
             }
+
             foreach (Shape shape in shapes)
             {
                 shape.TextFrame.TextRange.Font.Name = font;
@@ -74,6 +75,12 @@ namespace CongratulationsGenerator.MicrosoftOffice
 
         public void SaveDoc(string filename)
         {
+            var directory = Path.GetDirectoryName(filename);
+            if (directory != null)
+            {
+                Directory.CreateDirectory(directory);
+            }
+
             const string extension = "docx";
             if (!File.Exists(Path.ChangeExtension(filename, extension)))
             {
