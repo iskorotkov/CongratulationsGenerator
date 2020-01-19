@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,8 +16,6 @@ namespace CongratulationsGenerator.Core
         private IWishesDistributor _distributor;
         private IDataTable _table;
         private ITemplateDocument _template;
-        
-        private readonly List<Task> _cleanupTasks = new List<Task>();
 
         public Generator(IDocumentsFactory documentsFactory, IDistributorFactory distributorFactory,
             IConfigurationFactory configurationFactory)
@@ -30,30 +29,55 @@ namespace CongratulationsGenerator.Core
         {
             try
             {
-                await PrepareForGeneration();
-                var recipients = _table.GetRecipients().ToList();
-                var wishes = _table.GetWishes();
-                _cleanupTasks.Add(Task.Run(_table.Close));
-
+                var (recipients, wishes) = PrepareData();
                 _distributor = _distributorFactory.CreateDistributor(wishes);
                 if (_distributor.IsEnoughWishes(recipients.Count))
                 {
                     await GenerateLettersText(recipients);
-                    await Task.WhenAll(_cleanupTasks);
+                    FinishGeneration();
                 }
                 else
                 {
-                    _cleanupTasks.Add(Task.Run(_template.CloseDoc));
                     throw new NotEnoughWishesException();
                 }
             }
-            finally
+            catch (Exception)
             {
-                await Task.WhenAll(_cleanupTasks);
+                _template?.CloseDoc();
+                _table?.Close();
+                throw;
             }
         }
 
+        private (List<Recipient> recipients, IEnumerable<WishCategory> wishes) PrepareData()
+        {
+            _table = _documentsFactory.OpenDataTable();
+            var recipients = _table.GetRecipients().ToList();
+            var wishes = _table.GetWishes();
+            // TODO: Await?
+            _table.Close();
+            _table = null;
+            return (recipients, wishes);
+        }
+
         private async Task GenerateLettersText(IEnumerable<Recipient> recipients)
+        {
+            _config = _configurationFactory.GetConfiguration();
+            _template = _documentsFactory.OpenTemplateDocument(_config.TemplatePath, _config.CelebrationName);
+            await AddRecipients(recipients);
+            await _template.ApplyFont(_config.Font);
+        }
+
+        private void FinishGeneration()
+        {
+            // TODO: Add config values for auto saving and auto closing.
+            var filename = Path.Combine(_config.OutputPath, _config.DefaultFilename);
+            // TODO: Await?
+            _template.SaveDoc(filename);
+            _template.ShowDoc();
+        }
+
+        private async Task AddRecipients(IEnumerable<Recipient> recipients)
         {
             Task addRecipientTask = null;
             foreach (var recipient in recipients)
@@ -71,28 +95,6 @@ namespace CongratulationsGenerator.Core
             {
                 await addRecipientTask;
             }
-
-            await _template.ApplyFont(_config.Font);
-
-            // TODO: Add config values for auto saving and auto closing.
-
-            var filename = Path.Combine(_config.OutputPath, _config.DefaultFilename);
-            _cleanupTasks.Add(Task.Run(() => _template.SaveDoc(filename)));
-            _cleanupTasks.Add(Task.Run(_template.ShowDoc));
-        }
-
-        private async Task PrepareForGeneration()
-        {
-            var configTask = Task.Run(_configurationFactory.GetConfiguration);
-            var tableTask = Task.Run(_documentsFactory.OpenDataTable);
-
-            _config = await configTask;
-            _template = _documentsFactory.OpenTemplateDocument(
-                _config.TemplatePath,
-                _config.CelebrationName
-            );
-
-            _table = await tableTask;
         }
     }
 }

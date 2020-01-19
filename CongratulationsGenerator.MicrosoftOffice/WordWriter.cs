@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CongratulationsGenerator.Core;
@@ -19,7 +20,18 @@ namespace CongratulationsGenerator.MicrosoftOffice
         public WordWriter(string filename, string celebration)
         {
             _app = new Application();
-            _doc = _app.Documents.Add(filename);
+            try
+            {
+                _doc = _app.Documents.Add(filename);
+            }
+            catch (Exception e)
+            {
+                _app.Quit(false);
+                GC.Collect();
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(_app);
+                throw;
+            }
+
             _filename = filename;
             _celebration = celebration;
         }
@@ -106,6 +118,9 @@ namespace CongratulationsGenerator.MicrosoftOffice
         {
             _doc.Close(false);
             _app.Quit(false);
+            GC.Collect();
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(_doc);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(_app);
         }
 
         public void ShowDoc()

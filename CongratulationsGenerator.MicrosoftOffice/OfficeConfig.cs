@@ -8,9 +8,10 @@ namespace CongratulationsGenerator.MicrosoftOffice
     {
         public OfficeConfig(IConfigBackendFactory configDocFactory)
         {
-            var configDoc = configDocFactory.OpenConfig();
+            IConfigBackend configDoc = null;
             try
             {
+                configDoc = configDocFactory.OpenConfig();
                 foreach (var value in configDoc.ReadPreferences())
                 {
                     Preferences.Add(value.Key.ToLower(), value.Value);
@@ -18,7 +19,7 @@ namespace CongratulationsGenerator.MicrosoftOffice
             }
             finally
             {
-                configDoc.Close();
+                configDoc?.Close();
             }
         }
 

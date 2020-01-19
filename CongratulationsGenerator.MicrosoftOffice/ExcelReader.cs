@@ -14,7 +14,17 @@ namespace CongratulationsGenerator.MicrosoftOffice
         public ExcelReader(string filename)
         {
             _app = new Application();
-            _book = _app.Workbooks.Open(filename, null, true);
+            try
+            {
+                _book = _app.Workbooks.Open(filename, null, true);
+            }
+            catch (Exception e)
+            {
+                _app.Quit();
+                GC.Collect();
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(_app);
+                throw;
+            }
         }
 
         public Dictionary<string, string> ReadPreferences()
