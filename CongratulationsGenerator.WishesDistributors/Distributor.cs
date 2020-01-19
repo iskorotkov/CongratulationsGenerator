@@ -20,7 +20,21 @@ namespace CongratulationsGenerator.WishesDistributors
 
         public bool IsEnoughWishes(int recipients)
         {
-            var variants = _wishCategories.Aggregate(1, (current, wishCategory) => current * wishCategory.Wishes.Count);
+            var variants = 0;
+            var length = _wishCategories.Count;
+            for (var first = 0; first < length; ++first)
+            {
+                for (var second = first + 1; second < length; ++second)
+                {
+                    for (var third = second + 1; third < length; ++third)
+                    {
+                        variants += _wishCategories[first].Wishes.Count
+                                    * _wishCategories[second].Wishes.Count
+                                    * _wishCategories[third].Wishes.Count;
+                    }
+                }
+            }
+
             return variants >= recipients;
         }
 
