@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +11,13 @@ namespace CongratulationsGenerator.Core
         private readonly IDistributorFactory _distributorFactory;
         private readonly IDocumentsFactory _documentsFactory;
 
+        private IConfiguration _config;
+        private IWishesDistributor _distributor;
+        private IDataTable _table;
+        private ITemplateDocument _template;
+        
+        private readonly List<Task> _cleanupTasks = new List<Task>();
+
         public Generator(IDocumentsFactory documentsFactory, IDistributorFactory distributorFactory,
             IConfigurationFactory configurationFactory)
         {
@@ -20,55 +28,71 @@ namespace CongratulationsGenerator.Core
 
         public async Task Generate()
         {
-            var configTask = Task.Run(_configurationFactory.GetConfiguration);
-            var tableTask = Task.Run(_documentsFactory.OpenDataTable);
-
-            var config = await configTask;
-            var template = _documentsFactory.OpenTemplateDocument(
-                config.GetTemplatePath(),
-                config.Get("Celebration name")
-            );
-
-            var table = await tableTask;
-            var recipients = table.GetRecipients().ToList();
-            var wishes = table.GetWishes();
-            var closeTableTask = Task.Run(table.Close);
-            
-            var distributor = _distributorFactory.CreateDistributor(wishes);
-            if (distributor.IsEnoughWishes(recipients.Count))
+            try
             {
-                Task addRecipientTask = null;
-                foreach (var recipient in recipients)
-                {
-                    var recipientWishes = distributor.GetNextWishes();
-                    if (addRecipientTask != null)
-                    {
-                        await addRecipientTask;
-                    }
-                    addRecipientTask = template.AddRecipient(recipient, recipientWishes);
-                }
+                await PrepareForGeneration();
+                var recipients = _table.GetRecipients().ToList();
+                var wishes = _table.GetWishes();
+                _cleanupTasks.Add(Task.Run(_table.Close));
 
+                _distributor = _distributorFactory.CreateDistributor(wishes);
+                if (_distributor.IsEnoughWishes(recipients.Count))
+                {
+                    await GenerateLettersText(recipients);
+                    await Task.WhenAll(_cleanupTasks);
+                }
+                else
+                {
+                    _cleanupTasks.Add(Task.Run(_template.CloseDoc));
+                    throw new NotEnoughWishesException();
+                }
+            }
+            finally
+            {
+                await Task.WhenAll(_cleanupTasks);
+            }
+        }
+
+        private async Task GenerateLettersText(List<Recipient> recipients)
+        {
+            Task addRecipientTask = null;
+            foreach (var recipient in recipients)
+            {
+                var recipientWishes = _distributor.GetNextWishes();
                 if (addRecipientTask != null)
                 {
                     await addRecipientTask;
                 }
 
-                await template.ApplyFont(config.GetFont());
-                template.ShowDoc();
-
-                // TODO: Add config values for auto saving and auto closing.
-
-                var filename = Path.Combine(config.Get("output path"), config.Get("Default file name"));
-                template.SaveDoc(filename);
-                
-                await closeTableTask;
+                addRecipientTask = _template.AddRecipient(recipient, recipientWishes);
             }
-            else
+
+            if (addRecipientTask != null)
             {
-                var closeDocTask = Task.Run(template.CloseDoc);
-                await Task.WhenAll(closeTableTask, closeDocTask);
-                throw new NotEnoughWishesException();
+                await addRecipientTask;
             }
+
+            await _template.ApplyFont(_config.GetFont());
+
+            // TODO: Add config values for auto saving and auto closing.
+
+            var filename = Path.Combine(_config.Get("Output path"), _config.Get("Default file name"));
+            _cleanupTasks.Add(Task.Run(() => _template.SaveDoc(filename)));
+            _cleanupTasks.Add(Task.Run(_template.ShowDoc));
+        }
+
+        private async Task PrepareForGeneration()
+        {
+            var configTask = Task.Run(_configurationFactory.GetConfiguration);
+            var tableTask = Task.Run(_documentsFactory.OpenDataTable);
+
+            _config = await configTask;
+            _template = _documentsFactory.OpenTemplateDocument(
+                _config.GetTemplatePath(),
+                _config.Get("Celebration name")
+            );
+
+            _table = await tableTask;
         }
     }
 }
