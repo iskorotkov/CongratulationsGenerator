@@ -37,13 +37,23 @@ namespace CongratulationsGenerator.Core
             var distributor = _distributorFactory.CreateDistributor(wishes);
             if (distributor.IsEnoughWishes(recipients.Count))
             {
+                Task addRecipientTask = null;
                 foreach (var recipient in recipients)
                 {
                     var recipientWishes = distributor.GetNextWishes();
-                    template.AddRecipient(recipient, recipientWishes);
+                    if (addRecipientTask != null)
+                    {
+                        await addRecipientTask;
+                    }
+                    addRecipientTask = template.AddRecipient(recipient, recipientWishes);
                 }
 
-                template.ApplyFont(config.GetFont());
+                if (addRecipientTask != null)
+                {
+                    await addRecipientTask;
+                }
+
+                await template.ApplyFont(config.GetFont());
                 template.ShowDoc();
 
                 // TODO: Add config values for auto saving and auto closing.
