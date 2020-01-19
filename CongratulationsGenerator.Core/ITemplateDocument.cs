@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CongratulationsGenerator.Core
 {
     public interface ITemplateDocument
     {
-        void AddRecipient(Recipient recipient, IEnumerable<string> wishes);
-        void ApplyFont(string font);
+        Task AddRecipient(Recipient recipient, IEnumerable<string> wishes);
+        Task ApplyFont(string font);
         void SaveDoc(string filename);
         void CloseDoc();
         void ShowDoc();

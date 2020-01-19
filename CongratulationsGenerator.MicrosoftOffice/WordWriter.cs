@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using CongratulationsGenerator.Core;
 using Microsoft.Office.Interop.Word;
+using Task = System.Threading.Tasks.Task;
 
 namespace CongratulationsGenerator.MicrosoftOffice
 {
@@ -22,41 +24,62 @@ namespace CongratulationsGenerator.MicrosoftOffice
             _celebration = celebration;
         }
 
-        public void AddRecipient(Recipient recipient, IEnumerable<string> wishes)
+        public async Task AddRecipient(Recipient recipient, IEnumerable<string> wishes)
         {
             if (_shouldAddTemplateList)
             {
                 AddTemplateList();
             }
-            _shouldAddTemplateList = true;
-            
-            _doc.Bookmarks["Dear"].Range.Text = recipient.Gender.DearForm;
-            _doc.Bookmarks["Name"].Range.Text = recipient.Name;
 
-            if (_celebration != null)
+            _shouldAddTemplateList = true;
+
+            var tasks = new List<Task>
             {
-                _doc.Bookmarks["Celebration"].Range.Text = _celebration;
-            }
+                Task.Run(() => { _doc.Bookmarks["Dear"].Range.Text = recipient.Gender.DearForm; }),
+                Task.Run(() => { _doc.Bookmarks["Name"].Range.Text = recipient.Name; }),
+                Task.Run(() =>
+                {
+                    if (_celebration != null)
+                    {
+                        _doc.Bookmarks["Celebration"].Range.Text = _celebration;
+                    }
+                })
+            };
 
             var index = 1;
             foreach (var wish in wishes)
             {
-                _doc.Bookmarks["Wish" + index].Range.Text = wish;
+                var i = index;
+                var w = wish;
+                tasks.Add(Task.Run(() => { _doc.Bookmarks["Wish" + i].Range.Text = w; }));
                 index++;
             }
+
+            await Task.WhenAll(tasks);
         }
 
-        public void ApplyFont(string font)
+        public async Task ApplyFont(string font)
         {
-            foreach (Paragraph paragraph in _doc.Paragraphs)
-            {
-                paragraph.Range.Font.Name = font;
-            }
+            var paragraphsTask = Task.Run(() => _doc.Paragraphs);
+            var shapesTask = Task.Run(() => _doc.Shapes);
 
-            foreach (Shape shape in _doc.Shapes)
-            {
-                shape.TextFrame.TextRange.Font.Name = font;
-            }
+            var paragraphs = await paragraphsTask;
+            var tasks = (from Paragraph paragraph in paragraphs
+                select Task.Run(() =>
+                {
+                    var p = paragraph;
+                    p.Range.Font.Name = font;
+                })).ToList();
+
+            var shapes = await shapesTask;
+            tasks.AddRange(from Shape shape in shapes
+                select Task.Run(() =>
+                {
+                    var s = shape;
+                    s.TextFrame.TextRange.Font.Name = font;
+                }));
+
+            await Task.WhenAll(tasks);
         }
 
         public void SaveDoc(string filename)
@@ -75,7 +98,7 @@ namespace CongratulationsGenerator.MicrosoftOffice
                 _doc.SaveAs(path);
                 return;
             }
-            
+
             throw new OutputFileSavingException();
         }
 
